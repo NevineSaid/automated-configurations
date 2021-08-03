@@ -11,13 +11,53 @@
 - name: install Java 
   apt:
     update_cache: yes
-    pkg: 
-      - openjdk-8-jdk
-      - jenkins
+    pkg: openjdk-8-jdk
     state: present
+
+- name: install Jenkins
+  apt:
+    pkg: jenkins
+    state: present
+  when: "'jenkins_master' in inventory_hostname"
 
 - name: start jenkins
   service:
     name: jenkins
     state: started
     enabled: yes
+  when: "'jenkins_master' in inventory_hostname"
+
+- name: create ssh key for user jenkins on master
+  become: true
+  become_method: su
+  become_user: jenkins
+  shell: ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa
+  when: "'jenkins_master' in inventory_hostname"
+
+- name: copy id_rsa.pub from master to ansible control node
+  become: true
+  become_method: su
+  become_user: jenkins  
+  fetch:
+    src: /var/lib/jenkins/.ssh/id_rsa.pub
+    dest: jenkins2/files/
+  when: "'jenkins_master' in inventory_hostname"
+
+- name: create jenkins user on agent
+  shell: | 
+    useradd -md /var/lib/jenkins jenkins
+    mkdir /var/lib/jenkins/.ssh 
+    cd /var/lib/jenkins/.ssh && touch authorized_keys
+  when: "'jenkins_agent' in inventory_hostname"
+
+- name: copy master's public key in agent's authorized_keys
+  copy:
+    src: jenkins2/files/id_rsa.pub
+    dest: /var/lib/jenkins/.ssh/authorized_keys
+  when: "'jenkins_agent' in inventory_hostname"
+  
+#- name: enable port 8080
+#  ufw:
+#    rule: allow
+#    port: 8080
+#    state: enabled
