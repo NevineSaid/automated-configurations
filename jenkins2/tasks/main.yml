@@ -1,0 +1,23 @@
+---
+# tasks file for jenkins
+- name: add jenkins key
+  apt_key:
+    state: present
+    url: "https://pkg.jenkins.io/debian-stable/jenkins.io.key"
+
+- name: append package to sources.list
+  command: sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+
+- name: install Java 
+  apt:
+    update_cache: yes
+    pkg: 
+      - openjdk-8-jdk
+      - jenkins
+    state: present
+
+- name: start jenkins
+  service:
+    name: jenkins
+    state: started
+    enabled: yes
