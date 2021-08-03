@@ -27,6 +27,7 @@
     enabled: yes
   when: "'jenkins_master' in inventory_hostname"
 
+# user jenkins must not have a directory named .ssh before this command
 - name: create ssh key for user jenkins on master
   become: true
   become_method: su
@@ -43,6 +44,7 @@
     dest: files/
   when: "'jenkins_master' in inventory_hostname"
 
+# user jenkins must not exist before this command
 - name: create jenkins user on agent
   shell: | 
     useradd -md /var/lib/jenkins jenkins
