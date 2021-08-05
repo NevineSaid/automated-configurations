@@ -1,2 +1,6 @@
 ---
 # defaults file for jenkins2
+
+REMOTE_MASTER_PUBLIC_KEY_DIR: "/var/lib/jenkins/.ssh/id_rsa.pub"
+LOCAL_MASTER_PUBLIC_KEY_DIR: "files/jenkins_master/var/lib/jenkins/.ssh/id_rsa.pub"
+REMOTE_AGENT_AUTH_KEYS_DIR: "/var/lib/jenkins/.ssh/authorized_keys"

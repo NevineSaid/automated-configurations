@@ -1,2 +1,4 @@
 ---
 # vars file for jenkins2
+
+JENKINS_KEY: "https://pkg.jenkins.io/debian-stable/jenkins.io.key"

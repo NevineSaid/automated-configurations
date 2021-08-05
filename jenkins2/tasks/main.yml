@@ -3,7 +3,7 @@
 - name: add jenkins key
   apt_key:
     state: present
-    url: "https://pkg.jenkins.io/debian-stable/jenkins.io.key"
+    url: "{{ JENKINS_KEY }}" 
 
 - name: append package to sources.list
   command: sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
@@ -18,13 +18,8 @@
   apt:
     pkg: jenkins
     state: present
-  when: "'jenkins_master' in inventory_hostname"
-
-- name: start jenkins
-  service:
-    name: jenkins
-    state: started
-    enabled: yes
+  notify: 
+    - START_JENKINS
   when: "'jenkins_master' in inventory_hostname"
 
 # user jenkins must not have a directory named .ssh before this command
@@ -40,7 +35,7 @@
   become_method: su
   become_user: jenkins  
   fetch:
-    src: /var/lib/jenkins/.ssh/id_rsa.pub
+    src: "{{ REMOTE_MASTER_PUBLIC_KEY_DIR }}"
     dest: files/
   when: "'jenkins_master' in inventory_hostname"
 
@@ -54,8 +49,8 @@
 
 - name: copy master's public key in agent's authorized_keys
   copy:
-    src: files/jenkins_master/var/lib/jenkins/.ssh/id_rsa.pub
-    dest: /var/lib/jenkins/.ssh/authorized_keys
+    src: "{{ LOCAL_MASTER_PUBLIC_KEY_DIR }}" 
+    dest: "{{ REMOTE_AGENT_AUTH_KEYS_DIR }}"
   when: "'jenkins_agent' in inventory_hostname"
   
 #- name: enable port 8080
