@@ -14,6 +14,5 @@
 
 - name: install modules
   apt:
-    name: "{{ item }}"
-  with_items: "{{ PHP_MODULES }}"
+    name: "{{ PHP_MODULES }}"
   notify: reload php-fpm
