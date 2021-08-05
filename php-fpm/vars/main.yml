@@ -1,0 +1,20 @@
+---
+# vars file for /etc/ansible/roles/php-fpm
+
+PHP_MODULES:
+  - php{{ PHP_VERSION }}-curl
+  - php{{ PHP_VERSION }}-dev 
+  - php{{ PHP_VERSION }}-gd 
+  - php{{ PHP_VERSION }}-mbstring 
+  - php{{ PHP_VERSION }}-mysql 
+  - php{{ PHP_VERSION }}-soap 
+  - php{{ PHP_VERSION }}-xml 
+  - php{{ PHP_VERSION }}-zip
+  - php-gettext 
+  - php-igbinary
+  - php-memcached 
+  - php-msgpack 
+  - php-pear
+  - php-phpseclib 
+  - php-tcpdf 
+  - php-mcrypt 

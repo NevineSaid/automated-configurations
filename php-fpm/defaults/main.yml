@@ -1,0 +1,4 @@
+---
+# defaults file for /etc/ansible/roles/php-fpm
+
+PHP_VERSION: 7.3

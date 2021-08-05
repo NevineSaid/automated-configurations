@@ -1,0 +1,7 @@
+---
+# handlers file for /etc/ansible/roles/php-fpm
+
+- name: reload php-fpm
+  service:
+    name: "php{{ PHP_VERSION }}-fpm"
+    state: reloaded

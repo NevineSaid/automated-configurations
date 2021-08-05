@@ -1,0 +1,19 @@
+---
+# tasks file for /etc/ansible/roles/php-fpm
+
+- name: add apt repo for php-fpm
+  apt_repository:
+    repo: "ppa:ondrej/php"
+    state: present
+    
+- name: install PHP-FPM
+  apt:
+    name:
+      - "php{{ PHP_VERSION }}-fpm"
+    update_cache: yes
+
+- name: install modules
+  apt:
+    name: "{{ item }}"
+  with_items: "{{ PHP_MODULES }}"
+  notify: reload php-fpm
